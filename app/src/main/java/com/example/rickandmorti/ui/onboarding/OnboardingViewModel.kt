@@ -3,7 +3,7 @@ package com.example.rickandmorti.ui.onboarding
 import androidx.lifecycle.ViewModel
 import com.example.rickandmorti.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor() : ViewModel() {

@@ -1,38 +1,34 @@
 package com.example.rickandmorti
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import com.example.rickandmorti.data.SharedPreference
 import com.example.rickandmorti.databinding.ActivityMainBinding
-import com.example.rickandmorti.ui.CharacterAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var binding : ActivityMainBinding
+    @Inject
+    lateinit var pref : SharedPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupRecycler()
 
-        viewModel.getCharacters()
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val navController = navHostFragment.navController
 
-        viewModel.charactersData.observe(this) { data ->
+      if (!pref.isOnboardShown){
+          navController.navigate(R.id.onboardingFragment)
+      }
 
-        }
-    }
-
-    private fun setupRecycler() = with(binding) {
-        rvCharacters.adapter = CharacterAdapter()
-        rvCharacters.layoutManager = LinearLayoutManager(
-            this@MainActivity,
-            LinearLayoutManager.VERTICAL,
-            true
-        )
     }
 }

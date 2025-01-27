@@ -5,19 +5,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.rickandmorti.R
 import com.example.rickandmorti.databinding.ItemCharacterBinding
 
-class CharacterAdapter() : ListAdapter<Character, CharacterAdapter.CharacterViewHolder>(diffUtil) {
+class CharacterAdapter() : ListAdapter<com.example.rickandmorti.data.model.Character, CharacterAdapter.CharacterViewHolder>(diffUtil) {
     inner class CharacterViewHolder(private val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(character: Character) = with(binding) {
+        fun onBind(character: com.example.rickandmorti.data.model.Character) = with(binding) {
             characterName.text = character.name
             characterLocation.text = character.location?.name
             characterFirstSeen.text = character.origin?.name
-            imgCharacter.load(character.image){
+            /*imgCharacter.load(character.image){
                 crossfade(true)
-            }
+            }*/
+            Glide.with(imgCharacter).load(character.image).into(imgCharacter)
             characterStatus.text = character.status
             colorIndicator.setImageResource(
                 when{
@@ -36,18 +38,17 @@ class CharacterAdapter() : ListAdapter<Character, CharacterAdapter.CharacterView
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        getItem(position)?.let {
-            holder.onBind(it)
-        }
+        val item = getItem(position)
+        holder.onBind(item)
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<Character>() {
-            override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
+        val diffUtil = object : DiffUtil.ItemCallback<com.example.rickandmorti.data.model.Character>() {
+            override fun areItemsTheSame(oldItem: com.example.rickandmorti.data.model.Character, newItem: com.example.rickandmorti.data.model.Character): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
+            override fun areContentsTheSame(oldItem: com.example.rickandmorti.data.model.Character, newItem: com.example.rickandmorti.data.model.Character): Boolean {
                 return oldItem == newItem
             }
         }
